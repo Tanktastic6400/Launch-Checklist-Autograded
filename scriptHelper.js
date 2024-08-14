@@ -15,30 +15,127 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
                  </ol>
                  <img src="">
     */
- }
- 
- function validateInput(testInput) {
-    
- }
- 
- function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-    
- }
- 
- async function myFetch() {
-     let planetsReturned;
- 
-     planetsReturned = await fetch().then( function(response) {
-         });
- 
-     return planetsReturned;
- }
- 
- function pickPlanet(planets) {
- }
- 
- module.exports.addDestinationInfo = addDestinationInfo;
- module.exports.validateInput = validateInput;
- module.exports.formSubmission = formSubmission;
- module.exports.pickPlanet = pickPlanet; 
- module.exports.myFetch = myFetch;
+}
+
+function validateInput(testInput) {
+    let tmp;
+    if (isNaN(testInput)) {
+        tmp = "Not a Number";
+    } else if (testInput === "") {
+        tmp = "Empty";
+    } else {
+        tmp = "Is a Number";
+    }
+
+    return tmp;
+}
+
+function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
+    let pilotName = validateInput(pilot);
+    let copilotName = validateInput(copilot);
+    let fuel = validateInput(fuelLevel);
+    let cargoMass = validateInput(cargoLevel);
+    let fuelStatus = document.getElementById("fuelStatus");
+    let cargoStatus = document.getElementById("cargoStatus");
+    let launchStatus = document.getElementById("launchStatus");
+    let errorString = "";
+
+    list.style.visibility = "visible";
+    if (pilotName === "Empty" || copilotName === "Empty" || fuel === "Empty" || cargoMass === "Empty") {
+        return alert("All fields required");
+    }
+
+    errorString = checkWrongInput(pilotName, copilotName, fuel, cargoMass);
+    if (errorString !== "") {
+        return alert(errorString);
+    }
+
+    checkPilotStatus(pilotName, pilotStatus, pilot);
+    checkCopilotStatus(copilotName, copilotStatus, copilot);
+    checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLevel);
+    checkCargoMass(cargoMass, cargoStatus, cargoLevel, launchStatus, list, fuelLevel);
+
+}//end of formSubmission
+
+async function myFetch() {
+    let planetsReturned;
+
+    planetsReturned = await fetch().then(function (response) {
+    });
+
+    return planetsReturned;
+}
+
+function pickPlanet(planets) {
+}
+
+//this starts the supporting functions
+//check cargo mass
+function checkCargoMass(cargoMass, cargoStatus, cargoLevel, launchStatus, list, fuelLevel) {
+    if (cargoMass === "Is a Number") {
+        if (cargoLevel > 10000) {
+            cargoStatus.textContent = "Cargo mass too heavy for launch";
+            launchStatus.style.color = "red";
+            launchStatus.textContent = "Shuttle Not Ready for Launch";
+            list.style.visibility = "visible";
+        } else if (cargoLevel < 10000 && fuelLevel >= 10000) {
+            cargoStatus.textContent = "Cargo mass low enough for launch";
+            launchStatus.style.color = "green";
+            launchStatus.textContent = "Shuttle is Ready for Launch";
+        }
+    }
+}
+
+//check fuel level
+function checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLevel) {
+    if (fuel === "Is a Number") {
+        if (fuelLevel < 10000) {
+            fuelStatus.textContent = "Fuel level too low for launch";
+            launchStatus.style.color = "red";
+            launchStatus.textContent = "Shuttle Not Ready for Launch";
+            list.style.visibility = "visible";
+        } else if (fuelLevel >= 10000 && cargoLevel < 10000) {
+            fuelStatus.textContent = "Fuel level high enough for launch";
+            launchStatus.style.color = "green";
+            launchStatus.textContent = "Shuttle is Ready for Launch";
+        }
+    }
+}
+
+//check pilot status
+function checkPilotStatus(pilotName, pilotStatus, pilot) {
+    if (pilotName === "Not a Number") {
+        document.getElementById("pilotStatus").textContent = `Pilot ${pilot} is ready for launch`;
+    }
+}
+
+//check copilot status
+function checkCopilotStatus(copilotName, copilotStatus, copilot) {
+    if (copilotName === "Not a Number") {
+        document.getElementById("copilotStatus").textContent = `Co-pilot ${copilot} is ready for launch`;
+    }
+}
+
+//check for wrong input : return a string (errorString);
+function checkWrongInput(pilotName, copilotName, fuel, cargoMass) {
+    let tmpString = "";
+    if (pilotName === "Is a Number") {
+        tmpString += "pilot Name Must Be a Name\n"
+    }
+    if (copilotName === "Is a Number") {
+        tmpString += "Copilot Name Must Be a Name\n"
+    }
+    if (fuel === "Not a Number") {
+        tmpString += "Fuel Level Must Be a Number\n"
+    }
+    if (cargoMass === "Not a Number") {
+        tmpString += "Cargo Mass Must Be a Number"
+    }
+    return tmpString;
+}
+
+module.exports.addDestinationInfo = addDestinationInfo;
+module.exports.validateInput = validateInput;
+module.exports.formSubmission = formSubmission;
+module.exports.pickPlanet = pickPlanet;
+module.exports.myFetch = myFetch;
