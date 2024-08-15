@@ -53,8 +53,8 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
         return alert(errorString);
     }
 
-    checkPilotStatus(pilotName, pilotStatus, pilot);
-    checkCopilotStatus(copilotName, copilotStatus, copilot);
+    checkPilotStatus(document, pilotName, pilot);
+    checkCopilotStatus(document, copilotName, copilot);
     checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLevel);
     checkCargoMass(cargoMass, cargoStatus, cargoLevel, launchStatus, list, fuelLevel);
 
@@ -109,14 +109,14 @@ function checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLe
 }
 
 //check pilot status
-function checkPilotStatus(pilotName, pilotStatus, pilot) {
+function checkPilotStatus(document, pilotName, pilot) {
     if (pilotName === "Not a Number") {
         document.getElementById("pilotStatus").textContent = `Pilot ${pilot} is ready for launch`;
     }
 }
 
 //check copilot status
-function checkCopilotStatus(copilotName, copilotStatus, copilot) {
+function checkCopilotStatus(document, copilotName, copilot) {
     if (copilotName === "Not a Number") {
         document.getElementById("copilotStatus").textContent = `Co-pilot ${copilot} is ready for launch`;
     }
