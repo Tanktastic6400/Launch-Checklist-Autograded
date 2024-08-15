@@ -55,8 +55,9 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 
     checkPilotStatus(document, pilotName, pilot);
     checkCopilotStatus(document, copilotName, copilot);
-    checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLevel);
-    checkCargoMass(cargoMass, cargoStatus, cargoLevel, launchStatus, list, fuelLevel);
+    checkCargoAndFuel(fuelStatus, fuelLevel, launchStatus, list, cargoLevel, cargoStatus)
+    // checkCargoMass(cargoMass, cargoStatus, cargoLevel, launchStatus, list, fuelLevel);
+    // checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLevel);
 
 }//end of formSubmission
 
@@ -84,12 +85,37 @@ function checkCargoMass(cargoMass, cargoStatus, cargoLevel, launchStatus, list, 
             launchStatus.style.color = "red";
             launchStatus.textContent = "Shuttle Not Ready for Launch";
             list.style.visibility = "visible";
-        } else if (cargoLevel < 10000 && fuelLevel >= 10000) {
+        } else if (cargoLevel <= 10000 && fuelLevel >= 10000) {
             cargoStatus.textContent = "Cargo mass low enough for launch";
             launchStatus.style.color = "green";
             launchStatus.textContent = "Shuttle is Ready for Launch";
         }
     }
+}
+function checkCargoAndFuel(fuelStatus, fuelLevel, launchStatus, list, cargoLevel, cargoStatus){
+    if (cargoLevel > 10000) {
+        cargoStatus.textContent = "Cargo mass too heavy for launch";
+        launchStatus.style.color = "red";
+        launchStatus.textContent = "Shuttle Not Ready for Launch";
+        list.style.visibility = "visible";
+    }
+    if (fuelLevel < 10000) {
+        fuelStatus.textContent = "Fuel level too low for launch";
+        launchStatus.style.color = "red";
+        launchStatus.textContent = "Shuttle Not Ready for Launch";
+        list.style.visibility = "visible";
+        console.log("This is the fuel level being passed: " + fuelLevel);
+    }
+    if(fuelLevel >= 10000){console.log("expected fuelLevel to be 10000: " + fuelLevel);}
+    if (fuelLevel > 9999 && cargoLevel <= 10000) {
+        fuelStatus.textContent = "Fuel level high enough for launch";
+        cargoStatus.textContent = "Cargo mass low enough for launch";
+        launchStatus.style.color = "green";
+        launchStatus.textContent = "Shuttle is Ready for Launch";
+    }
+
+
+    
 }
 
 //check fuel level
@@ -100,7 +126,7 @@ function checkFuelLevel(fuel, fuelStatus, fuelLevel, launchStatus, list, cargoLe
             launchStatus.style.color = "red";
             launchStatus.textContent = "Shuttle Not Ready for Launch";
             list.style.visibility = "visible";
-        } else if (fuelLevel >= 10000 && cargoLevel < 10000) {
+        } else if (fuelLevel >= 10000 && cargoLevel <= 10000) {
             fuelStatus.textContent = "Fuel level high enough for launch";
             launchStatus.style.color = "green";
             launchStatus.textContent = "Shuttle is Ready for Launch";
